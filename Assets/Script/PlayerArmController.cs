@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +9,8 @@ public class PlayerArmController : MonoBehaviour {
     public Image reticle;
     public VRInput m_VRInput;
     public VREyeRaycaster m_EyeRaycaster;
+	public AudioSource m_GunAudio;
+	public GameObject[] m_FlareMeshes;
 
 	// Use this for initialization
 	void Start () {
@@ -31,18 +32,23 @@ public class PlayerArmController : MonoBehaviour {
         Transform target = shootingMosquito ? shootingMosquito.transform : null;
 
         // Start shooting coroutine
-        StartCoroutine(Fire(target));
+		StartCoroutine(Fire(target));
     }// end of HandleDown
 
-    private IEnumerator Fire(Transform target)
+	private IEnumerator Fire(Transform target)
     {
         // Play sound
+		m_GunAudio.Play();
 
         // show fire
-
-        // Hit mosquito
+		// chose an index for a random flare mesh
+		int randomFlareIndex = Random.Range(0, m_FlareMeshes.Length);
+		m_FlareMeshes [randomFlareIndex].SetActive (true);
 
         yield return null;
+
+		// hide fire
+		m_FlareMeshes[randomFlareIndex].SetActive(false);
     }// end of fire
 
     // Update is called once per frame
