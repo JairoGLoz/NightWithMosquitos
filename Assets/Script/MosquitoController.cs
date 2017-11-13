@@ -19,6 +19,7 @@ public class MosquitoController : MonoBehaviour {
 
     // flag to keep track whether this mosquito is moving
     bool isMoving = true;
+    bool isAlive = true;
 
     // rigidboyd
     Rigidbody rb;
@@ -28,6 +29,10 @@ public class MosquitoController : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
+
+        // move spider to the ground
+        transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+
         // grab vr interactive component
         vrIntItem = GetComponent<VRInteractiveItem>();
 
@@ -58,26 +63,25 @@ public class MosquitoController : MonoBehaviour {
     private void HandleClick()
     {
         // check that it's moving
-		if (rb.isKinematic) {
+		if (isAlive) {
 
 			// disable isKinematic property
-			rb.isKinematic = false;
+			//rb.isKinematic = false;
 
 			// set animator flag to true
 			m_Animator.SetBool("isDead", true);
 
-			// apply force to mosquito
-			rb.AddForce (Camera.main.transform.forward * thrust);
 
-			// rotate mosquito transform
-			//transform.Rotate (new Vector3 (0, 0, 180));
+            // rotate mosquito transform
+            //transform.Rotate (new Vector3 (0, 0, 180));
 
-			// set the flag to false
-			isMoving = false;
-		} else {
-			// apply force to mosquito
-			rb.AddForce (Camera.main.transform.forward * thrust);
-		}// end of if
+            // set the flag to false
+            isAlive = false;
+            isMoving = false;
+		}
+
+        // apply force to mosquito
+        rb.AddForce(Camera.main.transform.forward * thrust);
 
     }// end of HandleClick
 
